@@ -1,0 +1,8 @@
+{
+  "name": "answer-page",
+  "description": "Ask your agent a hard question, get one readable page with diagrams instead of a wall of text.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Dodai0419"
+  }
+}

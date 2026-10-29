@@ -1,0 +1,13 @@
+{
+  "name": "answer-page",
+  "owner": {
+    "name": "Dodai0419"
+  },
+  "plugins": [
+    {
+      "name": "answer-page",
+      "source": "./",
+      "description": "Ask your agent a hard question, get one readable page with diagrams instead of a wall of text."
+    }
+  ]
+}

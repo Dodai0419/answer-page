@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TCP three-way handshake</title><style>:root{--bg:#f6f7f9;--card:#fff;--fg:#1f2328;--mute:#59636e;--line:#d1d9e0;--acc:#0969da;--hot:#ddf4ff;--ok:#1a7f37;--no:#cf222e;--warn:#9a6700}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--card:#151b23;--fg:#e6edf3;--mute:#9198a1;--line:#3d444d;--acc:#4493f8;--hot:#0c2d6b;--ok:#3fb950;--no:#f85149;--warn:#d29922}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1180px;margin:0 auto;padding:32px 20px}h1{margin:0;font-size:30px}.sub{color:var(--mute);margin:4px 0 14px}
+.lead{font-size:17px;max-width:80ch}.grid{display:grid;gap:16px;grid-template-columns:repeat(var(--cols),minmax(0,1fr));margin-top:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.card h2{font-size:16px;margin:0 0 10px;display:flex;gap:8px;align-items:center}.tag{background:var(--acc);color:#fff;border-radius:6px;padding:0 7px;font-size:13px}
+.meta{margin-left:auto;color:var(--mute);font-weight:400;font-size:12px}.fig{overflow-x:auto}.dia{max-width:100%;height:auto;font:13px system-ui,sans-serif}
+.node{fill:var(--card);stroke:var(--fg);stroke-width:1.3}.node.hot{fill:var(--hot);stroke:var(--acc);stroke-width:2}.note{fill:var(--hot);stroke:none}
+.ntext{fill:var(--fg);text-anchor:middle}.elabel{fill:var(--mute);text-anchor:middle;font-size:12px}.ah{fill:var(--fg)}
+.edge,.msg{stroke:var(--fg);stroke-width:1.3}.dash{stroke-dasharray:5 4}.life{stroke:var(--line);stroke-dasharray:3 4}
+table{border-collapse:collapse;width:100%}th,td{text-align:left;border-bottom:1px solid var(--line);padding:6px 8px;vertical-align:top}
+.chip{font-size:11px;font-weight:700;border-radius:9px;padding:1px 7px;color:#fff;text-transform:uppercase}.chip.ok{background:var(--ok)}.chip.no{background:var(--no)}.chip.warn{background:var(--warn)}
+.callout{border-left:4px solid var(--acc);background:var(--bg);border-radius:6px;padding:10px 14px;margin:10px 0}.callout.warn{border-color:var(--warn)}.callout.ok{border-color:var(--ok)}.callout.no{border-color:var(--no)}
+.callout p{margin:4px 0 0}code{background:var(--bg);border-radius:4px;padding:0 4px}pre{background:var(--bg);padding:10px;border-radius:8px;overflow:auto}
+footer{color:var(--mute);font-size:13px;margin-top:20px}@media(max-width:760px){.grid{grid-template-columns:1fr}.card{grid-column:auto!important}}</style></head>
+<body><main><h1>TCP three-way handshake</h1><p class="sub">How two hosts agree to talk, and how they stop</p><div class="lead"><p>TCP opens a connection with three messages and closes it with four. Sequence numbers keep both sides in step.</p></div><div class="grid" style="--cols:3"><section class="card" style="grid-column:span 2"><h2><span class="tag">A</span>Three-way handshake<span class="meta">open</span></h2><div class="fig"><svg xmlns="http://www.w3.org/2000/svg" class="dia" viewBox="0 0 478 366" width="478">
+<defs><marker id="sh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+<line class="life" x1="129.7" y1="44" x2="129.7" y2="356"/>
+<rect class="node" x="92.3" y="10" width="74.8" height="34" rx="6"/>
+<text class="ntext" x="129.7" y="32">Client</text>
+<line class="life" x1="349.1" y1="44" x2="349.1" y2="356"/>
+<rect class="node" x="311.7" y="10" width="74.8" height="34" rx="6"/>
+<text class="ntext" x="349.1" y="32">Server</text>
+<rect class="note" x="313.7" y="62" width="70.8" height="28" rx="4"/>
+<text class="ntext" x="349.1" y="81">LISTEN</text>
+<line class="msg" x1="129.7" y1="126" x2="345.1" y2="126" marker-end="url(#sh)"/>
+<text class="elabel" x="239.4" y="119">SYN, seq=x</text>
+<rect class="note" x="86.5" y="154" width="86.4" height="28" rx="4"/>
+<text class="ntext" x="129.7" y="173">SYN_SENT</text>
+<line class="msg" x1="349.1" y1="218" x2="133.7" y2="218" marker-end="url(#sh)"/>
+<text class="elabel" x="239.4" y="211">SYN+ACK, seq=y, ack=x+1</text>
+<line class="msg" x1="129.7" y1="264" x2="345.1" y2="264" marker-end="url(#sh)"/>
+<text class="elabel" x="239.4" y="257">ACK, ack=y+1</text>
+<rect class="note" x="99.7" y="292" width="279.4" height="28" rx="4"/>
+<text class="ntext" x="239.4" y="311">ESTABLISHED</text>
+</svg></div></section>
+<section class="card" style="grid-column:span 1"><h2><span class="tag">B</span>Why three messages</h2><ol><li>The server learns that the client can send.</li><li>The client learns that the server can send and receive.</li><li>The server learns that the client can receive.</li></ol><div class="callout warn"><b>Two is not enough</b><p>An old duplicate SYN can arrive late. With two messages, the server opens a useless connection for it.</p></div></section>
+<section class="card" style="grid-column:span 2"><h2><span class="tag">C</span>State changes<span class="meta">simplified</span></h2><div class="fig"><svg xmlns="http://www.w3.org/2000/svg" class="dia" viewBox="0 0 848 142" width="848">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+<line class="edge" x1="94.8" y1="39.0" x2="285.0" y2="39.0" marker-end="url(#ah)"/>
+<text class="elabel" x="189.9" y="33.0">passive open</text>
+<line class="edge" x1="359.8" y1="39.0" x2="550.0" y2="39.0" marker-end="url(#ah)"/>
+<text class="elabel" x="454.9" y="33.0">get SYN / send SYN+ACK</text>
+<line class="edge dash" x1="94.8" y1="39.0" x2="277.2" y2="103.0" marker-end="url(#ah)"/>
+<text class="elabel" x="186.0" y="65.0">active open / send SYN</text>
+<line class="edge" x1="367.6" y1="103.0" x2="714.8" y2="39.0" marker-end="url(#ah)"/>
+<text class="elabel" x="541.2" y="65.0">get SYN+ACK / send ACK</text>
+<line class="edge" x1="640.4" y1="39.0" x2="714.8" y2="39.0" marker-end="url(#ah)"/>
+<text class="elabel" x="677.6" y="33.0">get ACK</text>
+<rect class="node" x="285.0" y="20.0" width="74.8" height="38.0" rx="6"/>
+<text class="ntext" x="322.4" y="43.5">LISTEN</text>
+<rect class="node" x="20.0" y="20.0" width="74.8" height="38.0" rx="19"/>
+<text class="ntext" x="57.4" y="43.5">CLOSED</text>
+<rect class="node" x="550.0" y="20.0" width="90.4" height="38.0" rx="6"/>
+<text class="ntext" x="595.2" y="43.5">SYN_RCVD</text>
+<rect class="node" x="277.2" y="84.0" width="90.4" height="38.0" rx="6"/>
+<text class="ntext" x="322.4" y="107.5">SYN_SENT</text>
+<rect class="node hot" x="714.8" y="20.0" width="113.8" height="38.0" rx="6"/>
+<text class="ntext" x="771.7" y="43.5">ESTABLISHED</text>
+</svg></div></section>
+<section class="card" style="grid-column:span 1"><h2><span class="tag">D</span>Flags</h2><table><tr><th>Flag</th><th>Job</th><th>In handshake</th></tr><tr><td>SYN</td><td>Start a connection</td><td><span class="chip ok">ok</span> steps 1, 2</td></tr><tr><td>ACK</td><td>Confirm receipt</td><td><span class="chip ok">ok</span> steps 2, 3</td></tr><tr><td>FIN</td><td>Stop sending</td><td><span class="chip no">no</span> not used</td></tr><tr><td>RST</td><td>Reset at once</td><td><span class="chip warn">warn</span> on error</td></tr></table></section></div><footer>Source: RFC 9293</footer></main></body></html>
